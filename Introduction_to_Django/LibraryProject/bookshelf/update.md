@@ -1,4 +1,4 @@
->>> b.title = "Nineteen Eighty-Four"
->>> b.save()
->>> print(b.title)
+>>> book.title = "Nineteen Eighty-Four"
+>>> book.save()
+>>> print(book.title)
 # Output: Nineteen Eighty-Four

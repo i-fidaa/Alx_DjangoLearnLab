@@ -1,19 +1,22 @@
 >>> from bookshelf.models import Book
->>> book = Book(title="1984", author="George Orwell", publication_year=1949)
->>> book.save()
-# Output: Book object created successfully with id=1
+>>> book = Book.objects.create(title="1984", author="George Orwell", publication_year=1949)
+# Output: <Book: 1984>
+
 
 >>> from bookshelf.models import Book
->>> b = Book.objects.get(title="1984")
->>> print(b.title, b.author, b.publication_year)
+>>> book = Book.objects.get(title="1984")
+>>> print(book.title, book.author, book.publication_year)
 # Output: 1984 George Orwell 1949
 
->>> b.title = "Nineteen Eighty-Four"
->>> b.save()
->>> print(b.title)
+
+>>> book.title = "Nineteen Eighty-Four"
+>>> book.save()
+>>> print(book.title)
 # Output: Nineteen Eighty-Four
 
->>> b.delete()
+
+>>> book.delete()
 # Output: (1, {'bookshelf.Book': 1})
 >>> Book.objects.all()
 # Output: <QuerySet []>
+
