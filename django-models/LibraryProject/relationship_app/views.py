@@ -70,7 +70,8 @@ def is_librarian(user):
     return user.userprofile.role == 'Librarian'
 
 def is_member(user):
-    return user.userprofile.role == 'Member'
+    return hasattr(user, 'userprofile') and user.userprofile.role == 'Member'
+
 
 
 @user_passes_test(is_admin)
