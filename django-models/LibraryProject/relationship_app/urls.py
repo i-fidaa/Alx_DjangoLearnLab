@@ -19,7 +19,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name="relationship_app/login.html"), name='login'),
     path('logout/', LogoutView.as_view(template_name="relationship_app/logout.html"), name='logout'),
 
-    path('books/add/', views.add_book, name='add_book'),
-    path('books/<int:pk>/edit/', views.edit_book, name='edit_book'),
-    path('books/<int:pk>/delete/', views.delete_book, name='delete_book'),
+    path('add_book/', views.add_book, name='add_book'),
+    path('edit_book/', views.edit_book, name='edit_book'),
+    path('delete_book/', views.delete_book, name='delete_book'),
 ]
