@@ -7,7 +7,7 @@ urlpatterns = [
     path("books/", views.list_books, name="list_books"),
 
     # Class-based view; expects a library ID
-    path("library/<int:pk>/", views.libraryDetailView.as_view(), name="library_detail"),
+    path("library/<int:pk>/", views.LibraryDetailView.as_view(), name="library_detail"),
 
     # Role-based URLs
     path('admin-view/', views.admin_view, name='admin_view'),
