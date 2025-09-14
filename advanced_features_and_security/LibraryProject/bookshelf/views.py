@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .forms import ExampleForm
 from django.contrib.auth.decorators import permission_required
 from .models import Book
 from django.db.models import Q
@@ -19,3 +20,13 @@ def search_books(request):
             Q(title__icontains=query) | Q(author__name__icontains=query)
         )
     return render(request, "bookshelf/book_list.html", {"books": books})
+
+def example_form_view(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("book_list")
+    else:
+        form = ExampleForm()
+    return render(request, "bookshelf/form_example.html", {"form": form})
