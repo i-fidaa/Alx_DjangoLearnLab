@@ -7,11 +7,19 @@ from django.dispatch import receiver
 # Create your models here.
 class Book(models.Model):
     title = models.CharField(max_length=200)
-    author = models.CharField(max_length=100)
-    publication_year = models.IntegerField()
+    author = models.ForeignKey('Author', on_delete=models.CASCADE, related_name="books")
+    publication_year = models.IntegerField(default=2000)
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+        ]
 
     def __str__(self):
-        return f"{self.title} by {self.author} ({self.publication_year})"
+        return f"{self.title} by {self.author.name}"
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -63,24 +71,6 @@ class Author(models.Model):
 
     def __str__(self):
         return self.name
-
-# -----------------------------
-# Book model
-# -----------------------------
-class Book(models.Model):
-    title = models.CharField(max_length=200)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="books")
-    publication_year = models.IntegerField(default=2000)
-
-    class Meta:
-        permissions = [
-            ("can_add_book", "Can add book"),
-            ("can_change_book", "Can change book"),
-            ("can_delete_book", "Can delete book"),
-        ]
-
-    def __str__(self):
-        return f"{self.title} by {self.author.name}"
 
 # -----------------------------
 # Library model

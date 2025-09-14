@@ -24,4 +24,4 @@ class CustomUserAdmin(UserAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'role')
 
-admin.site.register(CustomUser, CustomUserAdmin)
+#admin.site.register(CustomUser, CustomUserAdmin)
