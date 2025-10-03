@@ -13,6 +13,7 @@ from django.urls import reverse_lazy
 from .models import Post, Comment, Tag
 from .forms import PostForm
 from .forms import CommentForm
+from taggit.models import Tag
 
 def register_view(request):
     """Handle user registration"""
@@ -144,23 +145,21 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == comment.author
 
 # Posts by Tag
-class PostsByTagListView(ListView):
-    """
-    Lists posts that have a given tag name.
-    URL passes tag_name in kwargs.
-    """
+class PostByTagListView(ListView):
     model = Post
-    template_name = "blog/posts_by_tag.html"
+    template_name = "blog/posts_by_tag.html"  # template for tag listing
     context_object_name = "posts"
+    paginate_by = 5  # optional pagination
 
     def get_queryset(self):
-        tag_name = self.kwargs.get("tag_name")
-        return Post.objects.filter(tags__name=tag_name).order_by("-published_date")
+        tag_slug = self.kwargs.get("tag_slug")
+        self.tag = get_object_or_404(Tag, slug=tag_slug)
+        return Post.objects.filter(tags__slug=tag_slug)
 
     def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['tag_name'] = self.kwargs.get("tag_name")
-        return ctx
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.tag
+        return context
 
 
 # Search

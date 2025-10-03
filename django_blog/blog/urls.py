@@ -12,7 +12,7 @@ from .views import (
     CommentUpdateView,
     CommentDeleteView,
 )
-from .views import PostsByTagListView, PostSearchListView
+from .views import PostByTagListView, PostSearchListView
 
 urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
@@ -28,7 +28,7 @@ urlpatterns = [
     path("comment/<int:pk>/update/", CommentUpdateView.as_view(), name="comment_update"),
     path("comment/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment_delete"),
     # view posts by tag name
-    path("tags/<str:tag_name>/", PostsByTagListView.as_view(), name="posts_by_tag"),
+    path("tags/<slug:tag_slug>/", PostByTagListView.as_view(), name="posts_by_tag"),
     # search endpoint (query param 'q')
     path("search/", PostSearchListView.as_view(), name="post_search"),
 ]
