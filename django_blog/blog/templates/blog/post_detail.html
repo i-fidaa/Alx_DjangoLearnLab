@@ -12,6 +12,17 @@
 <a href="{% url 'post_list' %}">Back to list</a>
 {% endblock %}
 
+<!-- Display tags for a post -->
+{% if post.tags.all %}
+    <div class="tags">
+        <strong>Tags:</strong>
+        {% for tag in post.tags.all %}
+            <a href="{% url 'posts_by_tag' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+
 <!-- COMMENTS SECTION -->
 <h3>Comments</h3>
 

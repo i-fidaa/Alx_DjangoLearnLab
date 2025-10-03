@@ -1,0 +1,11 @@
+<h2>Posts tagged with "{{ tag_name }}"</h2>
+
+{% if object_list %}
+    <ul>
+        {% for post in object_list %}
+            <li><a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No posts found with this tag.</p>
+{% endif %}

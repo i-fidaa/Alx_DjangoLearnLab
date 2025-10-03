@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.shortcuts import render, redirect
@@ -9,7 +10,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Post, Comment
+from .models import Post, Comment, Tag
 from .forms import PostForm
 from .forms import CommentForm
 
@@ -141,3 +142,49 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+
+# Posts by Tag
+class PostsByTagListView(ListView):
+    """
+    Lists posts that have a given tag name.
+    URL passes tag_name in kwargs.
+    """
+    model = Post
+    template_name = "blog/posts_by_tag.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_name = self.kwargs.get("tag_name")
+        return Post.objects.filter(tags__name=tag_name).order_by("-published_date")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['tag_name'] = self.kwargs.get("tag_name")
+        return ctx
+
+
+# Search
+class PostSearchListView(ListView):
+    """
+    Search posts by title, content, or tag name using query parameter 'q'.
+    Example: /search/?q=django
+    """
+    model = Post
+    template_name = "blog/search_results.html"
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q", "").strip()
+        if not query:
+            return Post.objects.none()
+        # search in title OR content OR tag name
+        return Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct().order_by("-published_date")
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['query'] = self.request.GET.get("q", "")
+        return ctx
