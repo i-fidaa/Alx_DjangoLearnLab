@@ -6,7 +6,7 @@
 <p><strong>Published:</strong> {{ object.published_date }}</p>
 
 {% if user == object.author %}
-  <a href="{% url 'post_edit' object.pk %}">Edit</a>
+  <a href="{% url 'post_update' object.pk %}">Edit</a>
   <a href="{% url 'post_delete' object.pk %}">Delete</a>
 {% endif %}
 <a href="{% url 'post_list' %}">Back to list</a>
